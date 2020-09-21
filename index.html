@@ -1,0 +1,852 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bàn cờ 8x8</title>
+  </head>
+  <style>
+    #canvas {
+      text-align: center;
+      margin: 0 200px;
+    }
+  </style>
+  <body>
+    <canvas id="canvas"></canvas>
+    <script>
+      const canvas = document.getElementById("canvas");
+      canvas.width = 900;
+      canvas.height = 900;
+      canvas.style.border = "4px solid black";
+      canvas.style.backgroundColor = "#ffbb91";
+
+      const ctx = canvas.getContext("2d");
+
+      //   Vẽ hình vuông phía trong
+
+      //   ctx.strokeStyle = "black";
+      //   ctx.rect(50, 50, 800, 800);
+      //   ctx.stroke();
+      ctx.moveTo(50, 50);
+      ctx.lineTo(850, 50);
+      ctx.lineTo(850, 850);
+      ctx.lineTo(50, 850);
+      ctx.lineTo(50, 50);
+      ctx.lineWidth = 5;
+      ctx.stroke();
+
+      // Vẽ bàn cờ
+      class Rect {
+        constructor(x, y, color) {
+          this.x = x;
+          this.y = y;
+          this.color = color;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.rect(this.x, this.y, 100, 100);
+          ctx.fill();
+        }
+      }
+      class Text {
+        constructor(text, x, y) {
+          this.text = text;
+          this.x = x;
+          this.y = y;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.font = "bold 30pt Times New Roman";
+          ctx.fillStyle = "black";
+          ctx.textAlign = "center";
+          ctx.fillText(this.text, this.x, this.y);
+        }
+      }
+      function drawRect() {
+        for (let i = 0; i < 8; i++) {
+          for (let j = 0; j < 8; j++) {
+            if ((i + j) % 2 == 0) {
+              let rect = new Rect(j * 100 + 50, i * 100 + 50, "#ffbb91");
+              rect.draw();
+            } else if ((i + j) % 2 == 1) {
+              let rect = new Rect(j * 100 + 50, i * 100 + 50, "#87431d");
+              rect.draw();
+            }
+          }
+        }
+      }
+      drawRect();
+
+      //   Vẽ Text và Number
+      function drawText() {
+        let row = ["A", "B", "C", "D", "E", "F", "G", "H"];
+        for (let i = 0; i < 2; i++) {
+          for (j = 0; j < 8; j++) {
+            let text = new Text(row[j], j * 100 + 100, i * 850 + 40);
+            text.draw();
+          }
+        }
+      }
+      drawText();
+
+      function drawNumber() {
+        let row = ["8", "7", "6", "5", "4", "3", "2", "1"];
+        for (let i = 0; i < 2; i++) {
+          for (j = 0; j < 8; j++) {
+            let text = new Text(row[j], i * 850 + 25, j * 100 + 110);
+            text.draw();
+          }
+        }
+      }
+      drawNumber();
+      //   Bước 1
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.arc(210, 100, 40, (5 / 6) * Math.PI, 1.5 * Math.PI);
+      ctx.fill();
+
+      // //   Bước 1
+      // ctx.beginPath();
+      // ctx.fillStyle = "white";
+      // ctx.arc(00, 61, 6, 0, 2 * Math.PI);
+      // ctx.fill();
+
+      // // Bước 2
+      // ctx.beginPath();
+      // ctx.fillStyle = "white";
+      // ctx.moveTo(300, 61);
+      // ctx.lineTo(313, 85);
+      // ctx.lineTo(287, 85);
+      // ctx.lineTo(300, 61);
+      // ctx.lineWidth = 1;
+      // ctx.lineCap = "round";
+      // ctx.fill();
+
+      // //   Bước 3
+      // ctx.beginPath();
+      // ctx.fillStyle = "white";
+      // ctx.arc(300, 94, 16, (Math.PI / 4) * 3, Math.PI / 4);
+      // ctx.fill();
+
+      // // Bước 4
+
+      // ctx.beginPath();
+      // ctx.strokeStyle = "white";
+      // ctx.moveTo(284, 106);
+      // ctx.lineTo(316, 106);
+      // ctx.lineWidth = 3;
+      // ctx.lineCap = "round";
+      // ctx.stroke();
+
+      // // Bước 5
+
+      // ctx.beginPath();
+      // ctx.fillStyle = "white";
+      // ctx.moveTo(312, 106);
+      // ctx.lineTo(316, 128);
+      // ctx.lineTo(284, 128);
+      // ctx.lineTo(288, 106);
+      // ctx.fill();
+
+      // // Bước 6
+
+      // ctx.beginPath();
+      // ctx.strokeStyle = "white";
+      // ctx.moveTo(282, 128);
+      // ctx.lineTo(318, 128);
+      // ctx.lineWidth = 2;
+      // ctx.stroke();
+
+      // // Bước 7
+
+      // ctx.beginPath();
+      // ctx.strokeStyle = "white";
+      // ctx.moveTo(280, 130);
+      // ctx.lineTo(320, 130);
+      // ctx.lineWidth = 4;
+      // ctx.stroke();
+
+      // // Bước 8
+
+      // ctx.beginPath();
+      // ctx.strokeStyle = "white";
+      // ctx.moveTo(278, 136);
+      // ctx.lineTo(322, 136);
+      // ctx.lineWidth = 10;
+      // ctx.lineCap = "round";
+      // ctx.stroke();
+
+      class Tot {
+        constructor(x, y, r, color) {
+          this.x = x;
+          this.y = y;
+          this.r = r;
+          this.color = color;
+        }
+        draw() {
+          //   Bước 1
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          //   ctx.shadowColor = "black";
+          //   ctx.shadowOffsetX = 2;
+          //   ctx.shadowOffsetY = 2;
+          //   ctx.shadowBlur = 20;
+          ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+          ctx.fill();
+          //   Bước 2
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.arc(this.x, this.y + 20, this.r + 5, 0, 2 * Math.PI);
+          ctx.fill();
+          //   Bước 3
+          ctx.beginPath();
+          ctx.strokeStyle = this.color;
+          ctx.moveTo(this.x - 15, this.y + 35);
+          ctx.lineTo(this.x + 15, this.y + 35);
+          ctx.lineWidth = 5;
+          ctx.lineCap = "round";
+          ctx.stroke();
+          //   Bước 4
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.arc(this.x, this.y + 58, this.r + 15, 0, Math.PI, true);
+          ctx.fill();
+          //   Bước 5
+          ctx.beginPath();
+          ctx.strokeStyle = this.color;
+          ctx.moveTo(this.x - 25, this.y + 58);
+          ctx.lineTo(this.x + 25, this.y + 58);
+          ctx.lineWidth = 7;
+          ctx.lineCap = "round";
+          ctx.stroke();
+        }
+      }
+
+      function drawTotWhite() {
+        for (let i = 0; i < 8; i++) {
+          let tot = new Tot(i * 100 + 100, 175, 10, "white");
+          tot.draw();
+        }
+      }
+      drawTotWhite();
+      function drawTotBlack() {
+        for (let i = 0; i < 8; i++) {
+          let tot = new Tot(i * 100 + 100, 675, 10, "black");
+          tot.draw();
+        }
+      }
+      drawTotBlack();
+
+      class Rook {
+        constructor(x, y, width, height, color) {
+          this.x = x;
+          this.y = y;
+          this.width = width;
+          this.height = height;
+          this.color = color;
+        }
+        draw() {
+          //   Bước 1
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.rect(this.x, this.y, this.width, this.height);
+          // ctx.rect(70, 55, 10, 8);
+          ctx.fill();
+
+          // Bước 2
+
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.rect(this.x + 20, this.y, this.width * 2, this.height);
+          // ctx.rect(90, 55, 20, 8);
+          ctx.fill();
+
+          // Bước 3
+
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.rect(this.x + 50, this.y, this.width, this.height);
+          // ctx.rect(120, 55, 10, 8);
+          ctx.fill();
+
+          // Bước 4
+
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.rect(this.x - 3, this.y + 8, this.width + 56, this.height - 1);
+          // ctx.rect(67, 63, 66, 7);
+          ctx.fill();
+
+          // Bước 5
+
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.rect(this.x + 4, this.y + 15, this.width + 42, this.height - 3);
+          // ctx.rect(74, 70, 52, 5);
+          ctx.fill();
+
+          // Bước 6
+
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.rect(this.x + 11, this.y + 20, this.width + 28, this.height + 42);
+          // ctx.rect(81, 75, 38, 50);
+          ctx.fill();
+
+          // Bước 7
+
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.rect(this.x + 6, this.y + 70, this.width + 38, this.height - 3);
+          // ctx.rect(76, 125, 48, 5);
+          ctx.fill();
+
+          // Bước 8
+
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.rect(this.x - 2, this.y + 75, this.width + 52, this.height - 3);
+          // ctx.rect(68, 130, 62, 5);
+          ctx.fill();
+
+          // Bước 9
+
+          ctx.beginPath();
+          ctx.strokeStyle = this.color;
+          ctx.moveTo(this.x - 2, this.y + 85);
+          // ctx.moveTo(68, 140);
+          ctx.lineTo(this.x + 60, this.y + 85);
+          // ctx.lineTo(130, 140);
+          ctx.lineWidth = this.height + 2;
+          ctx.lineCap = "round";
+          ctx.stroke();
+        }
+      }
+
+      function drawRook() {
+        for (let i = 0; i < 2; i++) {
+          for (let j = 0; j < 2; j++) {
+            if (i == 0) {
+              var color = "white";
+            } else {
+              var color = "black";
+            }
+            let rook = new Rook(j * 700 + 70, i * 700 + 55, 10, 8, color);
+            rook.draw();
+          }
+        }
+      }
+      drawRook();
+
+      class Bishop {
+        constructor(x, y, r, color) {
+          this.x = x;
+          this.y = y;
+          this.r = r;
+          this.color = color;
+        }
+        draw() {
+          //   Bước 1
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+          // ctx.arc(300, 61, 6, 0, 2 * Math.PI);
+          ctx.fill();
+
+          // Bước 2
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(this.x + 13, this.y + 24);
+          // ctx.lineTo(313, 85);
+          ctx.lineTo(this.x - 13, this.y + 24);
+          // ctx.lineTo(287, 85);
+          ctx.lineTo(this.x, this.y);
+          // ctx.lineTo(300, 61);
+          ctx.lineWidth = 1;
+          ctx.lineCap = "round";
+          ctx.fill();
+
+          //   Bước 3
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.arc(
+            this.x,
+            this.y + 33,
+            this.r + 10,
+            (Math.PI / 4) * 3,
+            Math.PI / 4
+          );
+          // ctx.arc(300, 94, 16, (Math.PI / 4) * 3, Math.PI / 4);
+          ctx.fill();
+
+          // Bước 4
+
+          ctx.beginPath();
+          ctx.strokeStyle = this.color;
+          ctx.moveTo(this.x - 16, this.y + 45);
+          // ctx.moveTo(284, 106);
+          ctx.lineTo(this.x + 16, this.y + 45);
+          // ctx.lineTo(316, 106);
+          ctx.lineWidth = 3;
+          ctx.lineCap = "round";
+          ctx.stroke();
+
+          // Bước 5
+
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.moveTo(this.x + 12, this.y + 45);
+          // ctx.moveTo(312, 106);
+          ctx.lineTo(this.x + 16, this.y + 67);
+          // ctx.lineTo(316, 128);
+          ctx.lineTo(this.x - 16, this.y + 67);
+          // ctx.lineTo(284, 128);
+          ctx.lineTo(this.x - 12, this.y + 45);
+          // ctx.lineTo(288, 106);
+          ctx.fill();
+
+          // Bước 6
+
+          ctx.beginPath();
+          ctx.strokeStyle = this.color;
+          ctx.moveTo(this.x - 18, this.y + 67);
+          // ctx.moveTo(282, 128);
+          ctx.lineTo(this.x + 18, this.y + 67);
+          // ctx.lineTo(318, 128);
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Bước 7
+
+          ctx.beginPath();
+          ctx.strokeStyle = this.color;
+          ctx.moveTo(this.x - 20, this.y + 69);
+          // ctx.moveTo(280, 130);
+          ctx.lineTo(this.x + 20, this.y + 69);
+          // ctx.lineTo(320, 130);
+          ctx.lineWidth = 4;
+          ctx.stroke();
+
+          // Bước 8
+
+          ctx.beginPath();
+          ctx.strokeStyle = this.color;
+          ctx.moveTo(this.x - 22, this.y + 75);
+          // ctx.moveTo(278, 136);
+          ctx.lineTo(this.x + 22, this.y + 75);
+          // ctx.lineTo(322, 136);
+          ctx.lineWidth = 10;
+          ctx.lineCap = "round";
+          ctx.stroke();
+        }
+      }
+      function drawBishop() {
+        for (let i = 0; i < 2; i++) {
+          for (let j = 0; j < 2; j++) {
+            if (i == 0) {
+              var color = "white";
+            } else {
+              var color = "black";
+            }
+            let bishop = new Bishop(j * 300 + 300, i * 700 + 61, 6, color);
+            bishop.draw();
+          }
+        }
+      }
+      drawBishop();
+
+      // ctx.save();
+      // ctx.scale(0.6, 1);
+      // ctx.transform(1, 0.7, 0, 1, 0, 0);
+      // ctx.beginPath();
+      // ctx.fillStyle = "white";
+      // ctx.arc(900, 550, 20, 0, 2 * Math.PI);
+      // ctx.fill();
+      // ctx.restore();
+
+      // Vẽ Queen
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.arc(400, 61, 6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.moveTo(400, 61);
+      ctx.lineTo(408, 100);
+      ctx.lineTo(392, 100);
+      ctx.lineTo(400, 61);
+
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.arc(414, 63, 6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.moveTo(414, 63);
+      ctx.lineTo(414, 102);
+      ctx.lineTo(402, 98);
+      ctx.lineTo(414, 63);
+
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.arc(386, 63, 6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.moveTo(386, 63);
+      ctx.lineTo(386, 102);
+      ctx.lineTo(398, 98);
+      ctx.lineTo(386, 63);
+
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.arc(372, 66, 6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.moveTo(372, 66);
+      ctx.lineTo(378, 106);
+      ctx.lineTo(389, 100);
+      ctx.lineTo(372, 66);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.arc(428, 66, 6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.moveTo(428, 66);
+      ctx.lineTo(424, 106);
+      ctx.lineTo(411, 100);
+      ctx.lineTo(428, 66);
+      ctx.fill();
+
+      ctx.save();
+      ctx.scale(1, 0.7);
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.arc(400, 160, 25, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(374, 127);
+      ctx.lineTo(424, 127);
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(370, 130);
+      ctx.lineTo(428, 130);
+      ctx.lineWidth = 5;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(368, 135);
+      ctx.lineTo(430, 135);
+      ctx.lineWidth = 7;
+      ctx.stroke();
+
+      // Bước 1 vẽ Queen đen
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.arc(400, 761, 6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.moveTo(400, 761);
+      ctx.lineTo(408, 800);
+      ctx.lineTo(392, 800);
+      ctx.lineTo(400, 761);
+
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.arc(414, 763, 6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.moveTo(414, 763);
+      ctx.lineTo(414, 802);
+      ctx.lineTo(402, 798);
+      ctx.lineTo(414, 763);
+
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.arc(386, 763, 6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.moveTo(386, 763);
+      ctx.lineTo(386, 802);
+      ctx.lineTo(398, 798);
+      ctx.lineTo(386, 763);
+
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.arc(372, 766, 6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.moveTo(372, 766);
+      ctx.lineTo(378, 806);
+      ctx.lineTo(389, 800);
+      ctx.lineTo(372, 766);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.arc(428, 766, 6, 0, 2 * Math.PI);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.moveTo(428, 766);
+      ctx.lineTo(424, 806);
+      ctx.lineTo(411, 800);
+      ctx.lineTo(428, 766);
+      ctx.fill();
+
+      ctx.save();
+      ctx.scale(1, 0.7);
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.arc(400, 1160, 25, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(374, 827);
+      ctx.lineTo(424, 827);
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(370, 830);
+      ctx.lineTo(428, 830);
+      ctx.lineWidth = 5;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(368, 835);
+      ctx.lineTo(430, 835);
+      ctx.lineWidth = 7;
+      ctx.stroke();
+
+      // Vẽ vua-KING
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(500, 58);
+      ctx.lineTo(500, 77);
+      ctx.lineWidth = 7;
+      ctx.lineCap = "butt";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(490, 65);
+      ctx.lineTo(510, 65);
+      ctx.lineWidth = 7;
+      ctx.lineCap = "butt";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.moveTo(480, 77);
+      ctx.lineTo(520, 77);
+      ctx.lineTo(515, 95);
+      ctx.lineTo(485, 95);
+      ctx.lineTo(480, 77);
+      // ctx.lineWidth = 1;
+      // ctx.lineCap = "butt";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(482, 95);
+      ctx.lineTo(517, 95);
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(480, 97);
+      ctx.lineTo(519, 97);
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(478, 99);
+      ctx.lineTo(521, 99);
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(478, 99);
+      ctx.lineTo(521, 99);
+      ctx.lineWidth = 4;
+      ctx.lineCap = "round";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.fillStyle = "white";
+      ctx.moveTo(490, 99);
+      ctx.lineTo(482, 130);
+      ctx.lineTo(517, 130);
+      ctx.lineTo(510, 99);
+      ctx.lineTo(490, 99);
+      // ctx.lineWidth = 4;
+      // ctx.lineCap = "round";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(478, 130);
+      ctx.lineTo(521, 130);
+      ctx.lineWidth = 4;
+      ctx.lineCap = "butt";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(476, 134);
+      ctx.lineTo(523, 134);
+      ctx.lineWidth = 4;
+      ctx.lineCap = "butt";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "white";
+      ctx.moveTo(472, 138);
+      ctx.lineTo(527, 138);
+      ctx.lineWidth = 6;
+      ctx.lineCap = "round";
+      ctx.stroke();
+
+      // Vẽ vua đen
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(500, 758);
+      ctx.lineTo(500, 777);
+      ctx.lineWidth = 7;
+      ctx.lineCap = "butt";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(490, 765);
+      ctx.lineTo(510, 765);
+      ctx.lineWidth = 7;
+      ctx.lineCap = "butt";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.moveTo(480, 777);
+      ctx.lineTo(520, 777);
+      ctx.lineTo(515, 795);
+      ctx.lineTo(485, 795);
+      ctx.lineTo(480, 777);
+      // ctx.lineWidth = 1;
+      // ctx.lineCap = "butt";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(482, 795);
+      ctx.lineTo(517, 795);
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(480, 797);
+      ctx.lineTo(519, 797);
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(478, 799);
+      ctx.lineTo(521, 799);
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(478, 799);
+      ctx.lineTo(521, 799);
+      ctx.lineWidth = 4;
+      ctx.lineCap = "round";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.fillStyle = "black";
+      ctx.moveTo(490, 799);
+      ctx.lineTo(482, 830);
+      ctx.lineTo(517, 830);
+      ctx.lineTo(510, 799);
+      ctx.lineTo(490, 799);
+      // ctx.lineWidth = 4;
+      // ctx.lineCap = "round";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(478, 830);
+      ctx.lineTo(521, 830);
+      ctx.lineWidth = 4;
+      ctx.lineCap = "butt";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(476, 834);
+      ctx.lineTo(523, 834);
+      ctx.lineWidth = 4;
+      ctx.lineCap = "butt";
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "black";
+      ctx.moveTo(472, 838);
+      ctx.lineTo(527, 838);
+      ctx.lineWidth = 6;
+      ctx.lineCap = "round";
+      ctx.stroke();
+    </script>
+  </body>
+</html>
